@@ -1,3 +1,4 @@
+from ctypes.wintypes import SIZE
 from turtle import Turtle
 STARTING_POSITIONS = [(0,0), (-20,0),(-40,0)]
 MOVE_DISTANCE = 20
@@ -5,17 +6,19 @@ UP=90
 DOWN=270
 LEFT=180
 RIGHT=0
-SIZE = 0.5
+
+
 
 
 
 
 class Snake:
-
-    def __init__(self):
+    def __init__(self, size=1.0):
+        self.size = size
         self.segments = []
         self.create_snake()
         self.head=self.segments[0]
+
 
     def create_snake(self):
         for position in STARTING_POSITIONS:
@@ -23,7 +26,7 @@ class Snake:
 
     def add_segment(self, position):
         t = Turtle("square")
-        t.turtlesize(SIZE, SIZE)
+        t.turtlesize(self.size, self.size)
         t.color("white")
         t.penup()
         t.goto(position)

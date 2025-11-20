@@ -8,42 +8,57 @@ from scoreboard import Scoreboard
 
 screen_size = int(input("Enter the screen size (e.g., 600 for 600x600): "))
 
+close= 20
 
 # Added a difficulty setting
 difficulty = input("Choose a difficulty: Easy, Medium, Hard: ").lower()
-close_values = [20,15,10]
+
+# close = distance to detect food
+# delay = time between moves (speed)
+# snake_size = turtle size
+
 if difficulty == "easy":
-    time.sleep(0.2)
-    close = close_values[0]
+    close = 20
+    delay = 0.2
+    snake_size = 1.0
 elif difficulty == "medium":
-    time.sleep(0.1)
-    close = close_values[1]
+    close = 15
+    delay = 0.1
+    snake_size = 0.75
 elif difficulty == "hard":
-    time.sleep(0.005)
-    close = close_values[2]
+    close = 15
+    delay = 0.05
+    snake_size = 0.5
 else:
     print("Invalid difficulty. Defaulting to Easy.")
-    time.sleep(0.2)
-    close = close_values[0]
+    difficulty = "easy"
+    close = 20
+    delay = 0.2
+    snake_size = 1.0
 print(f"The difficulty is set to: {difficulty}")
+print(f"Snake size: {snake_size}, food distance: {close}, speed delay: {delay}")
 
-
-how_close = 20
 screen = Screen()
 screen.setup(width=screen_size, height=screen_size)
 screen.bgcolor("black")
 screen.title("My Snake Game")
 screen.tracer(0)
-scoreboard = Scoreboard()
-snake = Snake()
+
+
+# --- Game objects ---
+scoreboard = Scoreboard(screen_size)
+snake = Snake(size=snake_size)   # ✅ pass size into Snake
 food = Food()
 
+# Controls
 screen.listen()
 screen.onkey(snake.up,"Up")
 screen.onkey(snake.down,"Down")
 screen.onkey(snake.left,"Left")
 screen.onkey(snake.right,"Right")
 
+
+#Game Loop
 game_is_on = True
 while game_is_on:
     screen.update()
@@ -51,7 +66,7 @@ while game_is_on:
     snake.move()
 
     #detect collision with food
-    if snake.head.distance(food) < how_close:
+    if snake.head.distance(food) < close:
         food.refresh()
         scoreboard.increase_score()
         snake.extend()
@@ -66,26 +81,6 @@ while game_is_on:
     if snake.head.xcor() > screen_size-10 or snake.head.xcor() < -screen_size+10 or snake.head.ycor() > screen_size -10 or snake.head.ycor() < -screen_size+10:
         game_is_on = False
         scoreboard.game_over()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 screen.exitonclick()
